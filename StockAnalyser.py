@@ -106,8 +106,11 @@ class Asset(object):
         df=pd.DataFrame(month_end_prices)
       
         
-        # mothod 2: use API
-        # url = 'https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=AAPL&time_from=20220410T0130&apikey=S3XLG8C4CWQCWWYY'
+        # mothod 2: use API  # key='S3XLG8C4CWQCWWYY'
+        
+        # url = 'https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol='
+        # +str(self.ticker)+'&time_from=20220410T0130&apikey=KQRUDSKQT2REFLD5'
+       
 
         # r = requests.get(url)
         # data = r.json()
@@ -320,8 +323,8 @@ def main():
     print('\n Company info: \n')
     asset1.companyInfo("NASDAQ")
 
-if __name__ == "__main__":
-    main() 
+# if __name__ == "__main__":
+#     main() 
 
 
 

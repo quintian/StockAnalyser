@@ -15,7 +15,6 @@ from gooey import Gooey, GooeyParser
 from StockAnalyser import*
 
 
-
 item_default = {
         'error_color': '#ea7878',
         'label_color': '#ffffff',
@@ -32,14 +31,17 @@ item_default = {
     }
 
 @Gooey(dump_build_config=True,
+           
            program_name="Stock Analyser",
            advanced=True,
            auto_start=False,
-            body_bg_color='#bfbfbf',
+           body_bg_color='#bfbfbf',
+           # body_bg_color='black',
+          
+           header_bg_color='#009999',
+           footer_bg_color='#009999',
            
-            header_bg_color='#009999',
-            footer_bg_color='#009999',
-   
+         
            
            sidebar_bg_color='#262626',
            terminal_font_color="white",
@@ -49,13 +51,7 @@ item_default = {
             font_color= 'black',
             
            )
-# (program_name="Stock Analyser", navigation="SIDEBAR", show_sidebar=True, 
-#        sidebar_bg_color="#f2f2f2", header_bg_color="#009999", 
-#        # text_color="#cc9900", 
-#        textColor="yellow", terminal_font_color="white", color="grey", terminal_panel_color="grey", 
-#        # terminal_panel_color="#f2f2f2"
-       
-#         body_bg_color="#f2f2f2")
+
 def main():
     
     parser = GooeyParser(description="""Welcome to Stock Analyser! 
@@ -107,7 +103,7 @@ def main():
     
     if args.selection_2:
         asset1.plotRegression()
-        print(f"\n\nLog regression between {args.StockTicker}'s return and market return has been calculated.\n")
+        print(f"\n\nLog regression between {args.StockTicker}'s return and market return has been plotted.\n")
     
     if args.selection_3:
         projected_return = asset1.predictedAnnualReturn()
