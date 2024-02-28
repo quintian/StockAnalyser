@@ -1,0 +1,376 @@
+{
+  "language": "english",
+  "target": "'/Users/qt/anaconda3/bin/python' -u '/Users/qt/Documents/112 TP3 final/UI_Gooey.py'",
+  "suppress_gooey_flag": false,
+  "program_name": "Stock Analyser",
+  "program_description": "Welcome to Stock Analyser! \n        Plese put in a Stock Ticker and choose an index and selection, then click 'Start'.\n        On the result page, click 'Edit' to come back to this page, or 'Close' to exit. ",
+  "sidebar_title": "Actions",
+  "default_size": [
+    610,
+    530
+  ],
+  "auto_start": false,
+  "show_advanced": true,
+  "run_validators": true,
+  "encoding": "utf-8",
+  "show_stop_warning": true,
+  "show_success_modal": true,
+  "show_failure_modal": true,
+  "force_stop_is_error": true,
+  "poll_external_updates": false,
+  "return_to_config": false,
+  "show_restart_button": true,
+  "requires_shell": true,
+  "menu": [],
+  "clear_before_run": false,
+  "fullscreen": false,
+  "use_legacy_titles": true,
+  "num_required_cols": 2,
+  "num_optional_cols": 2,
+  "manual_start": false,
+  "monospace_display": false,
+  "image_dir": "::gooey/default",
+  "language_dir": "/Users/qt/anaconda3/lib/python3.11/site-packages/gooey/languages",
+  "progress_regex": null,
+  "progress_expr": null,
+  "hide_progress_msg": false,
+  "timing_options": {
+    "show_time_remaining": false,
+    "hide_time_remaining_on_complete": true
+  },
+  "disable_progress_bar_animation": false,
+  "disable_stop_button": false,
+  "navigation": "SIDEBAR",
+  "show_sidebar": false,
+  "tabbed_groups": false,
+  "group_by_type": true,
+  "body_bg_color": "#bfbfbf",
+  "header_bg_color": "#009999",
+  "header_height": 80,
+  "header_show_title": true,
+  "header_show_subtitle": true,
+  "header_image_center": false,
+  "footer_bg_color": "#009999",
+  "sidebar_bg_color": "#262626",
+  "terminal_panel_color": "#d9d9d9",
+  "terminal_font_color": "white",
+  "terminal_font_family": null,
+  "terminal_font_weight": 400,
+  "terminal_font_size": null,
+  "richtext_controls": false,
+  "error_color": "#ea7878",
+  "layout": "standard",
+  "widgets": {
+    "UI_Gooey.py": {
+      "command": "::gooey/default",
+      "name": "UI_Gooey.py",
+      "help": null,
+      "description": "",
+      "contents": [
+        {
+          "name": "required_args_msg",
+          "items": [
+            {
+              "id": "StockTicker",
+              "type": "TextField",
+              "cli_type": "positional",
+              "required": true,
+              "data": {
+                "display_name": "StockTicker",
+                "help": "Please type the stock ticker into this box",
+                "required": true,
+                "nargs": "",
+                "commands": [],
+                "choices": [],
+                "default": null,
+                "dest": "StockTicker"
+              },
+              "options": {
+                "error_color": "#ea7878",
+                "label_color": "#000000",
+                "help_color": "#363636",
+                "full_width": false,
+                "validator": {
+                  "type": "ExpressionValidator",
+                  "test": "user_input and not user_input.isspace()",
+                  "message": "This field is required"
+                },
+                "external_validator": {
+                  "cmd": ""
+                }
+              }
+            },
+            {
+              "id": "INDEX",
+              "type": "Dropdown",
+              "cli_type": "positional",
+              "required": true,
+              "data": {
+                "display_name": "INDEX",
+                "help": "Choose where it's issued",
+                "required": true,
+                "nargs": "",
+                "commands": [],
+                "choices": [
+                  "NASDAQ",
+                  "NYSE"
+                ],
+                "default": null,
+                "dest": "INDEX"
+              },
+              "options": {
+                "error_color": "#ea7878",
+                "label_color": "#000000",
+                "help_color": "#363636",
+                "full_width": false,
+                "validator": {
+                  "type": "ExpressionValidator",
+                  "test": "user_input",
+                  "message": "This field is required"
+                },
+                "external_validator": {
+                  "cmd": ""
+                }
+              }
+            }
+          ],
+          "groups": [],
+          "description": null,
+          "options": {
+            "label_color": "#0099cc",
+            "description_color": "black",
+            "legacy": {
+              "required_cols": 2,
+              "optional_cols": 2
+            },
+            "columns": 2,
+            "padding": 10,
+            "show_border": false,
+            "text_color": "#0099cc"
+          }
+        },
+        {
+          "name": "options",
+          "items": [
+            {
+              "id": "5fe8e921-f158-4bb2-ba6d-6f28e32544cc",
+              "type": "RadioGroup",
+              "cli_type": "optional",
+              "group_name": "Choose Option",
+              "required": "selection",
+              "options": {
+                "error_color": "#ea7878",
+                "label_color": "#000000",
+                "help_color": "#363636",
+                "full_width": false,
+                "validator": {
+                  "type": "local",
+                  "test": "lambda x: True",
+                  "message": ""
+                },
+                "external_validator": {
+                  "cmd": ""
+                }
+              },
+              "data": {
+                "commands": [
+                  [
+                    "--selection_1"
+                  ],
+                  [
+                    "--selection_2"
+                  ],
+                  [
+                    "--selection_3"
+                  ],
+                  [
+                    "--selection_4"
+                  ],
+                  [
+                    "--selection_5"
+                  ]
+                ],
+                "widgets": [
+                  {
+                    "id": "--selection_1",
+                    "type": "CheckBox",
+                    "cli_type": "optional",
+                    "required": false,
+                    "data": {
+                      "display_name": "selection_1",
+                      "help": "1. Get the average annual risk return rate",
+                      "required": false,
+                      "nargs": "",
+                      "commands": [
+                        "--selection_1"
+                      ],
+                      "choices": [],
+                      "default": false,
+                      "dest": "selection_1"
+                    },
+                    "options": {
+                      "error_color": "#ea7878",
+                      "label_color": "#000000",
+                      "help_color": "#363636",
+                      "full_width": false,
+                      "validator": {
+                        "type": "ExpressionValidator",
+                        "test": "True",
+                        "message": ""
+                      },
+                      "external_validator": {
+                        "cmd": ""
+                      }
+                    }
+                  },
+                  {
+                    "id": "--selection_2",
+                    "type": "CheckBox",
+                    "cli_type": "optional",
+                    "required": false,
+                    "data": {
+                      "display_name": "selection_2",
+                      "help": "2. Get the graph of log regression between your stock return and market return",
+                      "required": false,
+                      "nargs": "",
+                      "commands": [
+                        "--selection_2"
+                      ],
+                      "choices": [],
+                      "default": false,
+                      "dest": "selection_2"
+                    },
+                    "options": {
+                      "error_color": "#ea7878",
+                      "label_color": "#000000",
+                      "help_color": "#363636",
+                      "full_width": false,
+                      "validator": {
+                        "type": "ExpressionValidator",
+                        "test": "True",
+                        "message": ""
+                      },
+                      "external_validator": {
+                        "cmd": ""
+                      }
+                    }
+                  },
+                  {
+                    "id": "--selection_3",
+                    "type": "CheckBox",
+                    "cli_type": "optional",
+                    "required": false,
+                    "data": {
+                      "display_name": "selection_3",
+                      "help": "3. Get the projected risk return rate",
+                      "required": false,
+                      "nargs": "",
+                      "commands": [
+                        "--selection_3"
+                      ],
+                      "choices": [],
+                      "default": false,
+                      "dest": "selection_3"
+                    },
+                    "options": {
+                      "error_color": "#ea7878",
+                      "label_color": "#000000",
+                      "help_color": "#363636",
+                      "full_width": false,
+                      "validator": {
+                        "type": "ExpressionValidator",
+                        "test": "True",
+                        "message": ""
+                      },
+                      "external_validator": {
+                        "cmd": ""
+                      }
+                    }
+                  },
+                  {
+                    "id": "--selection_4",
+                    "type": "CheckBox",
+                    "cli_type": "optional",
+                    "required": false,
+                    "data": {
+                      "display_name": "selection_4",
+                      "help": "4. Get company's financial information",
+                      "required": false,
+                      "nargs": "",
+                      "commands": [
+                        "--selection_4"
+                      ],
+                      "choices": [],
+                      "default": false,
+                      "dest": "selection_4"
+                    },
+                    "options": {
+                      "error_color": "#ea7878",
+                      "label_color": "#000000",
+                      "help_color": "#363636",
+                      "full_width": false,
+                      "validator": {
+                        "type": "ExpressionValidator",
+                        "test": "True",
+                        "message": ""
+                      },
+                      "external_validator": {
+                        "cmd": ""
+                      }
+                    }
+                  },
+                  {
+                    "id": "--selection_5",
+                    "type": "CheckBox",
+                    "cli_type": "optional",
+                    "required": false,
+                    "data": {
+                      "display_name": "selection_5",
+                      "help": "5. Get the summary table",
+                      "required": false,
+                      "nargs": "",
+                      "commands": [
+                        "--selection_5"
+                      ],
+                      "choices": [],
+                      "default": false,
+                      "dest": "selection_5"
+                    },
+                    "options": {
+                      "error_color": "#ea7878",
+                      "label_color": "#000000",
+                      "help_color": "#363636",
+                      "full_width": false,
+                      "validator": {
+                        "type": "ExpressionValidator",
+                        "test": "True",
+                        "message": ""
+                      },
+                      "external_validator": {
+                        "cmd": ""
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "groups": [],
+          "description": null,
+          "options": {
+            "label_color": "#0099cc",
+            "description_color": "black",
+            "legacy": {
+              "required_cols": 2,
+              "optional_cols": 2
+            },
+            "columns": 2,
+            "padding": 10,
+            "show_border": false,
+            "text_color": "#0099cc"
+          }
+        }
+      ]
+    }
+  }
+}
