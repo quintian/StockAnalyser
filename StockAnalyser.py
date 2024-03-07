@@ -1,22 +1,21 @@
-# This file read asset's data from Yahoo,  does regression analysis 
-# on asset's return and markets return, and generate the predicted returns.
 
-'''CITATION: I learned how to use Matplotlib from
-https://matplotlib.org/
 '''
-
-'''CITATION: 
-@author: Quinn Tian 
+@author: 
+Quinn Tian 
+Bryan Martyn
+Reetu Bok
 @copyright: 
-    Quinn Tian owns the copyright for everything in this model and application
-
+    Quinn Tian owns the copyright of this model and application.
+    No any distribution is permitted without her consent. 
  '''
+# This file retrieves the asset's data from websites like Yahoo or Google finance,  
+# does regression analysis on asset's return and markets return, and generate the predicted returns.
 import pandas as pd
 import numpy as np
 import datetime
-# import pandas_datareader as dr
+
 import matplotlib.pyplot as plt
-# Import yfinance package
+
 import yfinance as yf
 import requests
 from bs4 import BeautifulSoup
@@ -24,6 +23,7 @@ from bs4 import BeautifulSoup
 '''CITATION: The regression code is from the link:
 https://stackoverflow.com/questions/38676323/is-it-possible-to-get-monthly-historical-stock-prices-in-python
 '''
+# this function is to return regression coefficients of two series of numbers
 def estimate_coef(x, y): 
     # number of observations/points 
     n = np.size(x) 
@@ -42,12 +42,13 @@ def estimate_coef(x, y):
     return(b_0, b_1)
 
 '''treasury bill monthly rate'''
+# this function is to get monthly risk free returns from the downloaded csv file
 def monthlyTBReturns():
-     downloadTB=pd.read_csv("TB3MS.csv")# annual return
+     downloadTB=pd.read_csv("TB3MS.csv")# annual return of 3-month TB file is downloaded
      dataTB=downloadTB[2:]
      
      ''' use np to calculate monthly return:'''
-     dataTB['Monthly Return TB']=dataTB['TB3MS']/1200 #monthly return
+     dataTB['Monthly Return TB']=dataTB['TB3MS']/1200 # to get monthly return
      
     
      return dataTB
@@ -57,12 +58,12 @@ def monthlyTBReturns():
 dataTB=monthlyTBReturns() 
 # TB_returns=dataTB['Monthly Return TB'] 
 TB_returns=np.array(dataTB['Monthly Return TB'] )
-# a_return_TB=np.average(dataTB['TB4WK']/100)
 
+
+# this function is to get S&P monthly returns array
 def monthlySPReturns():
-     # df = pd.DataFrame()     
-     # df=dr.get_data_yahoo('^GSPC', interval='m',
-     #                            start='2017-1-1' , end='2020-1-1')['Adj Close']
+    
+     # download 3 years of S&P price from Yahoo finance
      data = yf.download('^GSPC', start="2021-01-01", end="2024-01-01") # new code
      month_end_prices = data['Adj Close'].resample('ME').last()
      
@@ -72,18 +73,14 @@ def monthlySPReturns():
      # exclude the first row since percentage change starts from the second row
      return np.array(m_returns[1:]) 
 
-     # # calculate monthly Return 
-     # m_returns=df.pct_change()
-     # # exclude the first row since percentage change starts from the second row
-     # return np.array(m_returns[1:]) 
+  
  
-   
- 
-
+# Asset class is for the collection of stocks 
 class Asset(object):
+    # init function of any instance with stock ticker
     def __init__(self, ticker):
         self.ticker=ticker
-
+    # download 3 years of daily stock price data from Yahoo finance
     def getData(self):
         data = yf.download(self.ticker, start="2021-01-01", end="2024-01-01") # new code
         # print("\n3 year\n", data.head())
@@ -94,7 +91,9 @@ class Asset(object):
         return df 
        
     
-        
+    #  download 3 years of monthly stock prices
+    # Note: 2 sets of code is provided here. The method 2 is to meet API download requirement
+    # In case of the limited usage of free API key, so mothod 1 is a safer option.   
     def getMonthlyData(self):
         # method 1: use yfinance package, like an API from yahoo finance
         
@@ -122,41 +121,48 @@ class Asset(object):
                     
         #                 # print (data['Monthly Adjusted Time Series'][key]['5. adjusted close']) 
         #                 monthlyPrice.append(float(data['Monthly Adjusted Time Series'][key]['5. adjusted close']))
-        #                 print(len(monthlyPrice))
+        #                # print(len(monthlyPrice))
         # df=pd.DataFrame(monthlyPrice)
         
         return df
         
                         
            
-
+    # this method is to calculate the daily returns and return as an array
     def getDailyReturns(self):
         df=self.getData()
         d_returns=df.pct_change()
         
         return np.array(d_returns[1:])
 
+    # this method is to calculate the average monthly returns from daily returns and return as array
     def averageMonthlyReturn(self):
         d_returns=self.getDailyReturns()
         m_return=np.exp(np.sum(np.log(d_returns+1)/36))-1
-        return m_return #changed to series
+        return m_return 
 
+    # this method is to calculate the average annual return of the stock
     def averageAnnualReturn(self):
         d_returns=self.getDailyReturns()
         a_return=np.exp(np.sum(np.log(d_returns+1)/3))-1
         return a_return
 
+    # this method is to calculate the volatility of a stock prices
     def getVolatility(self):
         d_returns=self.getDailyReturns()
         a_volatility=np.std(d_returns)*np.sqrt(251)
         return a_volatility
 
+    # this method is to calculate the monthly returns from the monthly price data
+    # and return as an array
     def monthlyReturnArray(self):
         df=self.getMonthlyData()
         m_returns=df.pct_change()
         
         return np.array(m_returns[1:])
 
+    # this method is to calculate the excess returns on top the risk free returns
+    #  for both the stock and the market, returns as a tuple of 2 arrays
     def excessReturnArray(self):
         m_returns=np.array(self.monthlyReturnArray())
         # print('m_________',np.size(m_returns))        
@@ -168,6 +174,8 @@ class Asset(object):
         excessReturns_SP=np.subtract(m_returns_SP,TB_returns)
         return excessReturns_SP, excess_returns
 
+    # this method is to get the log reguression coefficients
+    # between the market excess returns and the stock excess returns
     def logRegression(self):
         excessReturns_SP, excess_returns=self.excessReturnArray()
         x,y=np.log(excessReturns_SP+1),np.log(excess_returns+1)
@@ -183,11 +191,15 @@ class Asset(object):
 
         return alpha, beta
     
+    # this method is to draw and show the regression graph based on the logRegression() method
     def plotRegression(self):
         excessReturns_SP, excess_returns=self.excessReturnArray()
         x,y=np.log(excessReturns_SP+1),np.log(excess_returns+1)
         alpha, beta=estimate_coef(x, y)
-
+        alpha_pct=str(round(alpha*100, 2)) + '%'
+        beta_pct=str(round(beta*100, 2)) + '%'
+        
+        # plotting and labeling
         plt.plot(x, y, 'o')
         plt.plot(x, beta*x + alpha)
         plt.xlabel('SP Excess Returns')
@@ -196,7 +208,12 @@ class Asset(object):
         plt.show()
         plt.close()
         
-
+        # print the Alpha and Beta values in console
+        print(f"""The coefficients from the regression over market return:
+Alpha: {alpha_pct}, 
+Beta: {beta_pct}""")
+        
+    # This method is to calculate the projected monthly returns array
     def predictedMonthlyReturns(self):
         alpha, beta=self.logRegression()          
         excessReturn_SP, excess_returns=self.excessReturnArray()
@@ -210,11 +227,14 @@ class Asset(object):
         
         return predicted_returns_m  
 
+    # This method is to calculate the projected annual risk return rate
     def predictedAnnualReturn(self):
         predicted_returns_m=self.predictedMonthlyReturns()
         predicted_return_a=np.exp(np.sum(np.log(predicted_returns_m+1))/3)-1
         return predicted_return_a     
     
+    # This method is to generate all the monthly returns table, 
+    # not called in the current MVP product but kept for future use
     def monthlyTable(self):        
         returns_m=(self.monthlyReturnArray())
         average_returns_m=self.averageMonthlyReturn()
@@ -227,6 +247,8 @@ class Asset(object):
                 "predicted_returns_m":predicted_returns_m})
         
         return returns_table
+    
+    # This method is the print the results summary table in the console
         
     def summaryTable(self):
         a_return=self.averageAnnualReturn()
@@ -257,8 +279,7 @@ Beta: {beta_pct}"""
     
     """
     Citation: the below code is borrowed from: 
-    https://www.scrapingdog.com/blog/scrape-google-finance/
-    
+    https://www.scrapingdog.com/blog/scrape-google-finance/    
     
     """
     # this method is to web scrape company information from Google finance
@@ -281,8 +302,7 @@ Beta: {beta_pct}"""
         #     TARGET_URL = f"{BASE_URL}/quote/{SYMBOL}:{INDEX}?hl={LANGUAGE}"
  
         #     # make an HTTP request
-        #     page = requests.get(TARGET_URL)
-                
+        #     page = requests.get(TARGET_URL)           
 
     
         # use an HTML parser to grab the content from "page"
@@ -306,19 +326,18 @@ Beta: {beta_pct}"""
             print(item_description,": ", item_value)
         
 
-# Test cases:
-#      
+# Test driver with a Test case here    
 
 def main():
     # asset1=Asset(ticker)
     asset1=Asset('nvda')   
 
-    # print('\nasset1 predicted returns monthly:\n',asset1.predictedMonthlyReturns())
-    # print('\nmonthlyReturnArray:\n', asset1.monthlyReturnArray())
-    # print('\naverage annual return\n', asset1.averageAnnualReturn())
-    # print('\npredicted annual return\n', asset1.predictedAnnualReturn())
-    # print('\nvolatility:\n', asset1.getVolatility())
-    # print('\n Summary table: \n', asset1.summaryTable())
+    print('\nasset1 predicted returns monthly:\n',asset1.predictedMonthlyReturns())
+    print('\nmonthlyReturnArray:\n', asset1.monthlyReturnArray())
+    print('\naverage annual return\n', asset1.averageAnnualReturn())
+    print('\npredicted annual return\n', asset1.predictedAnnualReturn())
+    print('\nvolatility:\n', asset1.getVolatility())
+    print('\n Summary table: \n', asset1.summaryTable())
     
     print('\n Company info: \n')
     asset1.companyInfo("NASDAQ")
