@@ -1,9 +1,13 @@
 ﻿Stock Analyser - Term Project 
+
 Abstract
 This term project created a Python application - Stock Analyser. It takes any given stock’s 3 years of historical data, provides calculated average annual excess risk return rate, predicts excess return rate  by regression analysis between excess returns of individual assets and S&P 500 index (market returns). The backend model is designed with Asset Class to organize multiple methods, and polymorphism to output results. It has applied libraries Pandas, Numpy for data manipulation, YFinance, Requests and BeautifulSoup for web scraping. The UI applied Gooey package and implemented a user friendly GUI interface. 
 
+Here is a video demo: https://youtu.be/vx2nTbLwSok?si=u47hvw6n2lBlCxhA
+
 
 User Instructions
+
 You need to install all the libraries used: 
 Gooey by: https://github.com/chriskiehl/Gooey/, 
 YFinance by: https://pypi.org/project/yfinance/
